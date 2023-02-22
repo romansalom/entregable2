@@ -7,12 +7,13 @@ import cartRoutes from "./routes/cart.routes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3737;
+const PORT = process.env.PORT || 5000;
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_NAME = process.env.DB_NAME;
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.pnpufdn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
+app.use(express.json());
 app.use("/api/product" , productRoutes);
 app.use("/api/cart" , cartRoutes);
 app.get('/' , (req,res) =>{
