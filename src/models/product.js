@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { paginate } from "mongoose-paginate-v2";
-import mongoosePaginate from "mongoose-paginate-v2";
+import mongoosePaginate from 'mongoose-paginate-v2';
+
 
 const productCollection = "product";
 
