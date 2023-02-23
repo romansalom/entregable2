@@ -14,6 +14,7 @@ const DB_NAME = process.env.DB_NAME;
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.pnpufdn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use("/api/product" , productRoutes);
 app.use("/api/cart" , cartRoutes);
 app.get('/' , (req,res) =>{

@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
     }
   }
   try {
-    const respuesta = await productModel.find().paginate(
+    const respuesta = await productModel.paginate(
         query,
       {
         page: page,
