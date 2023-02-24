@@ -28,7 +28,7 @@ app.use("/", viewRoutes);
 app.set("view engine" , "ejs");
 app.engine("handlebars" , engine());
 app.set("view engine" , "handlebars");
-app.set("views" , "./src/views");
+app.set("views" , "./views");
 
 
 
