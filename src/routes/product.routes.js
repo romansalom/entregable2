@@ -1,19 +1,20 @@
 import { Router } from "express";
 import { productModel } from "../models/product.js";
-import mongoosePaginate from 'mongoose-paginate-v2';
+
+
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   const stock = req.query.stock;
-  const page = req.query.page || 1;
+  const page = req.query.page ;
   const limit = req.query.limit || 10;
   const sort = req.query.sort || 1;
   let query;
   let prevURL;
   let nextURL;
 
-  const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+  const url = req.protocol + "://" + req.get("host") + req.originalUrl;
   const category = req.query.category;
   if (category != undefined || stock != undefined) {
     if (category != undefined) {
@@ -32,7 +33,7 @@ router.get("/", async (req, res) => {
     const respuesta = await productModel.paginate(
         query,
       {
-        page: page,
+        page: page || 1,
         limit: limit,
         sort: { price: sort },
       }
@@ -43,7 +44,10 @@ router.get("/", async (req, res) => {
           : null;
 
         res.hasNextPage
-          ? (nextURL = url.replace(`page=${res.page}`, `page=${res.nextPage}`))
+          ? (nextURL = page == undefined
+             ?url.concat(`&page=${res.nextPage}`)
+             
+             : url.replace(`page=${res.page}`,`page=${res.nextPage}`))
           : null;
       
         return {
@@ -72,7 +76,7 @@ router.get("/", async (req, res) => {
       
    // respuesta.status = " success";
 
-    res.send(respuesta);
+   res.send(respuesta);
 
   } catch (err) {
     console.log(err);
@@ -132,7 +136,7 @@ router.put("/:id", async (req, res) => {
       !status||
       ! category
     ) {
-      newData = { title, description, price, thumbnail, code, stock, status };
+      newData = { title, description, price, thumbnail, code, stock, status , category};
       res.status(400).send({ error: "faltan datos" });
       return;
     }
