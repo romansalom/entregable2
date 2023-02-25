@@ -8,7 +8,7 @@ const CartsManager = new DBManager.CartsManager();
 cartsRouter.get("/", async (req, res) => {
   try {
     const limit = req.query.limit;
-    res.render(await CartsManager.getCarts(limit))
+    res.send(await CartsManager.getCarts(limit));
   } catch (err) {
     res.status(500).send(err.message);
     const error = err.message;

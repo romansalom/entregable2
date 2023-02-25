@@ -13,7 +13,7 @@ const cartSchema = new mongoose.Schema  ({
           product: {
 
             type: mongoose.Schema.Types.ObjectId,
-            ref: "products",
+          
 
           },
 
@@ -36,10 +36,10 @@ const cartSchema = new mongoose.Schema  ({
 {versionKey : false}
 );
 cartSchema.pre("find" , function (){
-  this.populate("products.porduct");
+  this.populate("products.product");
 });
 cartSchema.pre("findOne" , function (){
-  this.populate("products.porduct");
+  this.populate("products.product");
 })
 
 

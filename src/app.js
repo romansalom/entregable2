@@ -31,6 +31,25 @@ app.set("view engine" , "handlebars");
 app.set("views" , "./views");
 
 
+const dbConnection = ()=>{
+
+    mongoose.set('strictQuery', true)
+    
+    mongoose.connect(
+        STRING_CONNECTION,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        },
+        (err)=>{
+            if (!err){
+                console.log("CONEXION EXITOSA")
+            }else{
+                console.log("CONEXION FALLIDA",err)
+            }
+        }
+    )
+}
 
 
 
@@ -39,9 +58,13 @@ const server = app.listen (PORT , ()=>{
     console.log(`escuchando por puerto ${PORT}  `)
 })
 
+dbConnection();
+
 
 
 server.on('error' , (err) => {
     console.log('error starting server: ', err)
 });
+
+
 
