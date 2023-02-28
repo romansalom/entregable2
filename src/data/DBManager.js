@@ -1,8 +1,8 @@
-
-import {cartModel} from "../models/cart.js";
+import { cartModel } from "../models/cart.js";
 import { productModel } from "../models/product.js";
 
 const cartsModel = cartModel;
+const productsModel = productModel;
 
 class CartsManager {
   // This function returns all the carts present in the collection. In case there is a limit set with a query param it limits the data being sent.
@@ -30,20 +30,19 @@ class CartsManager {
     const cart = await cartsModel.find({ _id: cid });
     const newProd = { product: pid, quantity: 1 };
     const Nproducts = cart[0].products;
-  
 
     Nproducts.forEach((element, index) => {
       if (pid === element.product._id.toJSON()) {
         ind = index;
       }
     });
-    
+
     if (!isNaN(ind)) {
       Nproducts[ind].quantity++;
     } else {
       Nproducts.push(newProd);
     }
-    
+
     const result = cartsModel
       .find({ _id: cid })
       .updateMany({ products: Nproducts });
@@ -65,17 +64,15 @@ class CartsManager {
         ind = index;
       }
     });
-    
+
     if (!isNaN(ind)) {
       Nproducts.splice(ind, 1);
       const result = cartsModel
         .find({ _id: cid })
         .updateMany({ products: Nproducts });
       return result;
-    } 
-   
+    }
   }
-
 
   //This function allows you to update the whole cart.
   updateCart(cid, products) {
@@ -85,9 +82,8 @@ class CartsManager {
     return result;
   }
 
-
   //This function updates the quantity of an already existing product.
-  async updateProductQuantity(cid, pid,qty) {
+  async updateProductQuantity(cid, pid, qty) {
     let ind;
     const cart = await cartsModel.find({ _id: cid });
     const Nproducts = cart[0].products;
@@ -103,29 +99,24 @@ class CartsManager {
         .find({ _id: cid })
         .updateMany({ products: Nproducts });
       return result;
-    } 
+    }
   }
-
 
   //This function deletes the products from a cart.
   deleteCartProducts(cid) {
-    const result = cartsModel
-        .find({ _id: cid })
-        .updateMany({ products: [] });
-      return result;
+    const result = cartsModel.find({ _id: cid }).updateMany({ products: [] });
+    return result;
   }
-  
 }
 
 class ProductsManager {
   //This function brings all the products present in the collection. In case there is a limit set with a query param it limits the data being sent.
   getProducts(a) {
     if (a === undefined) {
-      return productModel.find();
+      return productsModel.find();
     }
-    return productModel.find().limit(a);
+    return productsModel.find().limit(a);
   }
-
 
   //This function is in charge of findig all of the products present in the collection. It uses pagination to serve the product as needed.
   //Meaning the request can be filtered by category or stock, and may also have a limit and sort options. All of this including the options to navigate through the pagination.
@@ -182,7 +173,7 @@ class ProductsManager {
 
   //This function brings the products present in the collection by id.
   getProductById(id) {
-    return productModel.find({ _id: id });
+    return productsModel.find({ _id: id });
   }
 
   // // Use  only in case the try catch in the route is deleted. Do not use throw as it will stop execution in the server
@@ -217,18 +208,18 @@ class ProductsManager {
       category: category,
       thumbnail: thumbnail,
     };
-    productModel.create(product);
+    productsModel.create(product);
   }
 
   //This function updates the data of a product.
   updateProduct(id, product) {
     // const result =  await productsModel.findByIdAndUpdate(id,product)
-    return productModel.find({ _id: id }).updateMany(product);
+    return productsModel.find({ _id: id }).updateMany(product);
   }
 
   //This function deletes a product from the collection.
   deleteProduct(id) {
-    return productModel.deleteOne({ _id: id });
+    return productsModel.deleteOne({ _id: id });
   }
 }
 

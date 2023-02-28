@@ -73,16 +73,17 @@ cartsRouter.delete("/:cid", async (req, res) => {
   }
 });
 
-
 //This method will delete a product within a cart.
 cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
   try {
     const id = req.params.cid;
     const pid = req.params.pid;
-    const result = await CartsManager.deleteCartProduct(id,pid);
-    res.status(200).send({ message: "Product deleted", acknowledged: result.acknowledged });
+    const result = await CartsManager.deleteCartProduct(id, pid);
+    res
+      .status(200)
+      .send({ message: "Product deleted", acknowledged: result.acknowledged });
   } catch (err) {
-    res.status(500).send('Product not found');
+    res.status(500).send("Product not found");
     const error = err.message;
     console.log(error);
   }
@@ -92,12 +93,12 @@ cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
 cartsRouter.put("/:cid", async (req, res) => {
   try {
     const id = req.params.cid;
-    const products = req.body
-    const result = await CartsManager.updateCart(id,products);
-    res
-      .status(200)
-      .send({ message: "Cart products updated", acknowledged: result.acknowledged });
-  
+    const products = req.body;
+    const result = await CartsManager.updateCart(id, products);
+    res.status(200).send({
+      message: "Cart products updated",
+      acknowledged: result.acknowledged,
+    });
   } catch (err) {
     res.status(500).send(err.message);
     const error = err.message;
@@ -105,20 +106,19 @@ cartsRouter.put("/:cid", async (req, res) => {
   }
 });
 
-
-//This method will update the quantity of a specific product within a specific cart. 
+//This method will update the quantity of a specific product within a specific cart.
 cartsRouter.put("/:cid/products/:pid", async (req, res) => {
   try {
     const id = req.params.cid;
     const pid = req.params.pid;
-    const quantity = req.body
-    const result = await CartsManager.updateProductQuantity(id,pid,quantity);
-    res
-      .status(200)
-      .send({ message: "Product quantity updated", acknowledged: result.acknowledged });
-  
+    const quantity = req.body;
+    const result = await CartsManager.updateProductQuantity(id, pid, quantity);
+    res.status(200).send({
+      message: "Product quantity updated",
+      acknowledged: result.acknowledged,
+    });
   } catch (err) {
-    res.status(500).send('Product not found');
+    res.status(500).send("Product not found");
     const error = err.message;
     console.log(error);
   }
@@ -138,7 +138,6 @@ cartsRouter.delete("/:cid/products", async (req, res) => {
     console.log(error);
   }
 });
-
 
 //Exporting the router.
 export default cartsRouter;

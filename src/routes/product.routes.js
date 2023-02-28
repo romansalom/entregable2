@@ -1,13 +1,11 @@
 import { Router } from "express";
 import { productModel } from "../models/product.js";
 
-
-
 const router = Router();
 
 router.get("/", async (req, res) => {
   const stock = req.query.stock;
-  const page = req.query.page ;
+  const page = req.query.page;
   const limit = req.query.limit || 10;
   const sort = req.query.sort || 1;
   let query;
@@ -31,53 +29,37 @@ router.get("/", async (req, res) => {
   }
   try {
     const respuesta = await productModel.paginate(
-        query,
+      query,
       {
         page: page || 1,
         limit: limit,
         sort: { price: sort },
-      }
-      ,
+      },
       (err, res) => {
         res.hasPrevPage
           ? (prevURL = url.replace(`page=${res.page}`, `page=${res.prevPage}`))
           : null;
-
         res.hasNextPage
-          ? (nextURL = page == undefined
-             ?url.concat(`&page=${res.nextPage}`)
-             
-             : url.replace(`page=${res.page}`,`page=${res.nextPage}`))
+          ? (nextURL =
+              page == undefined
+                ? url.concat(`&page=${res.nextPage}`)
+                : url.replace(`page=${res.page}`, `page=${res.nextPage}`))
           : null;
-      
         return {
           status: res.docs.length != 0 ? "success" : "error",
-
           payload: res.docs,
-
           totalPages: res.totalPages,
-
           prevPage: res.prevPage,
-
           nextPage: res.nextPage,
-
           page: res.page,
-
           hasPrevPage: res.hasPrevPage,
-
           hasNextPage: res.hasNextPage,
-
           prevLink: prevURL,
-
           nextLink: nextURL,
         };
       }
     );
-      
-   // respuesta.status = " success";
-
-   res.send(respuesta);
-
+    res.send(respuesta);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -86,7 +68,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { title, description, price, thumbnail, code, stock, status , category } =
+    const { title, description, price, thumbnail, code, stock, status, category } =
       req.body;
     if (
       !title ||
@@ -96,11 +78,13 @@ router.post("/", async (req, res) => {
       !code ||
       !stock ||
       !status ||
-      ! category
+      !category
     ) {
-      res.status(400).send({ error: "faltan datos" });
+      res.status(400).send({ error: "Faltan datos" });
       return;
     }
+    //const newProduct = new productModel({ title, description, price, thumbnail, code, stock, status });
+    // const respuesta = await newProduct.save();
     const respuesta = await productModel.create({
       title,
       description,
@@ -111,7 +95,6 @@ router.post("/", async (req, res) => {
       status,
       category,
     });
-    await productModel.create(req.body)
     res.send(respuesta);
   } catch (err) {
     console.log(err);
@@ -123,8 +106,7 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const newData = {};
   try {
-    const { title, description, price, thumbnail, code, stock, status , category} =
-      req.body;
+    const { title, description, price, thumbnail, code, stock, status } = req.body;
 
     if (
       !title ||
@@ -133,11 +115,10 @@ router.put("/:id", async (req, res) => {
       !thumbnail ||
       !code ||
       !stock ||
-      !status||
-      ! category
+      !status
     ) {
-      newData = { title, description, price, thumbnail, code, stock, status , category};
-      res.status(400).send({ error: "faltan datos" });
+      newData = { title, description, price, thumbnail, code, stock, status };
+      res.status(400).send({ error: "Faltan datos" });
       return;
     }
     const respuesta = await productModel.findByIdAndUpdate(id, newData);
@@ -149,7 +130,8 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  id === undefined ? res.status(400).send({ error: "faltan datos" }) : null;
+  id === undefined ? res.status(400).send({ error: "Faltan datos" }) : null;
+
   try {
     const respuesta = await productModel.findByIdAndDelete(id);
     res.send(respuesta);
@@ -157,5 +139,4 @@ router.delete("/:id", async (req, res) => {
     console.log(err);
   }
 });
-
 export default router;
